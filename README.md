@@ -4,9 +4,16 @@ Discover the latest fashion trends.
 
 # Built With
 
+FrontEnd:
+
 * React
 * Redux
 * Bootstrap
 * Stripe
 * Firebase
 * Sass
+
+BackEnd:
+
+* ExpressJS
+* Mongoose
