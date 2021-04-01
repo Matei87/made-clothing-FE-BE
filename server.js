@@ -16,15 +16,14 @@ const app = express();
 app.use(cors());
 
 
-
 //connect to database 
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('connected', () => console.log('Mongoose is connected'));
 
 
 //parse everything that is comming into JSON or DATA PARSING
-// for extended/deep JSON objects
 app.use(express.json());
+// for extended/deep JSON objects
 app.use(express.urlencoded({ extended: false }));
 
 

@@ -25,9 +25,6 @@ import { auth, createUserProfileDocument } from './firebase/firebase';
 import { fetchProducts } from './redux/shop/shop.actions';
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   componentDidMount() {
     const { setCurrentUser, getItems } = this.props;
