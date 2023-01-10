@@ -10,35 +10,34 @@ dotenv.config();
 // import items route
 const items = require('./routes/items');
 
-
 // initialize our express application
 const app = express();
 app.use(cors());
 
-
-//connect to database 
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+//connect to database
+mongoose.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 mongoose.connection.on('connected', () => console.log('Mongoose is connected'));
-
 
 //parse everything that is comming into JSON or DATA PARSING
 app.use(express.json());
 // for extended/deep JSON objects
 app.use(express.urlencoded({ extended: false }));
 
-
 //use routes
 app.use('/items', items);
 
 //Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
-    //set static folder
-    app.use(express.static('client/build'));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-    });
+  //set static folder
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
 }
 
 //define the port
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, console.log(`Server is starting at port ${PORT}`))
+app.listen(PORT, console.log(`Server is starting at port ${PORT}`));

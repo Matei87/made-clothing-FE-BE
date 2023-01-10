@@ -1,45 +1,44 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/auth';
 
 const config = {
-    apiKey: "AIzaSyBbKSskfRtXnOIu4cUaAmuLl6UtO0jM1e4",
-    authDomain: "made-clothing.firebaseapp.com",
-    databaseURL: "https://made-clothing.firebaseio.com",
-    projectId: "made-clothing",
-    storageBucket: "made-clothing.appspot.com",
-    messagingSenderId: "921681673235",
-    appId: "1:921681673235:web:568e51912fba077be413e6",
-    measurementId: "G-0D1BEDLRKK"
+  apiKey: 'AIzaSyBbKSskfRtXnOIu4cUaAmuLl6UtO0jM1e4',
+  authDomain: 'made-clothing.firebaseapp.com',
+  databaseURL: 'https://made-clothing.firebaseio.com',
+  projectId: 'made-clothing',
+  storageBucket: 'made-clothing.appspot.com',
+  messagingSenderId: '921681673235',
+  appId: '1:921681673235:web:568e51912fba077be413e6',
+  measurementId: 'G-0D1BEDLRKK',
 };
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-    if (!userAuth) {
-        return;
+  if (!userAuth) {
+    return;
+  }
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+  //console.log(snapShot);
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.log(error);
     }
-
-    const userRef = firestore.doc(`users/${userAuth.uid}`);
-    const snapShot = await userRef.get();
-    //console.log(snapShot);
-
-    if (!snapShot.exists) {
-        const { displayName, email } = userAuth;
-        const createdAt = new Date();
-
-        try {
-            await userRef.set({
-                displayName,
-                email,
-                createdAt,
-                ...additionalData
-            })
-        } catch (error) {
-            console.log(error);
-        }
-
-    }
-    return userRef;
-}
+  }
+  return userRef;
+};
 
 firebase.initializeApp(config);
 

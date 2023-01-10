@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
-import { Route, Switch, Redirect } from 'react-router-dom';
-import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions';
 
@@ -18,30 +17,26 @@ import NotFound from './pages/NotFound/NotFound';
 import Footer from './components/Footer/Footer';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
-import 'jquery/dist/jquery.min.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import { auth, createUserProfileDocument } from './firebase/firebase';
 import { fetchProducts } from './redux/shop/shop.actions';
 
 class App extends Component {
-
   componentDidMount() {
     const { setCurrentUser, getItems } = this.props;
-    // console.log(this.props)
 
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
-        userRef.onSnapshot(snapShot => {
+        userRef.onSnapshot((snapShot) => {
           setCurrentUser({
             currentUser: {
               id: snapShot.id,
-              ...snapShot.data()
-            }
-          })
+              ...snapShot.data(),
+            },
+          });
         });
       }
 
@@ -56,27 +51,45 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <>
         <Navbar />
-        <ScrollToTop>
-          <div className="container-fluid">
+        <div className='container-fluid'>
+          <Routes>
+            <Route path='/'>
+              <Route index element={<Homepage />} />
+              <Route path=':id' element={<ItemDetails />} />
+            </Route>
 
-            <Switch>
-              <Route exact path="/" component={Homepage} />
-              <Route exact path="/signin"
-                render={() => this.props.currentUser ? (<Redirect to="/" />) : (<SignInSignUp />)} />
-              <Route exact path="/favorite" component={Favorite} />
-              <Route exact path="/women" component={Women} />
-              <Route exact path="/men" component={Men} />
-              <Route exact path="/checkout" component={Checkout} />
-              <Route exact path="/:details/:details" component={ItemDetails} />
-              <Route component={NotFound} />
-            </Switch>
+            {this.props.currentUser ? (
+              <Navigate to='/' />
+            ) : (
+              <Route path='signin' element={<SignInSignUp />} />
+            )}
 
-          </div>
-        </ScrollToTop>
+            <Route path='favorite'>
+              <Route index element={<Favorite />} />
+              <Route path=':id' element={<ItemDetails />} />
+            </Route>
+
+            <Route path='women'>
+              <Route index element={<Women />} />
+              <Route path=':id' element={<ItemDetails />} />
+            </Route>
+
+            <Route path='men'>
+              <Route index element={<Men />} />
+              <Route path=':id' element={<ItemDetails />} />
+            </Route>
+
+            <Route path='checkout'>
+              <Route index element={<Checkout />} />
+              <Route path=':id' element={<ItemDetails />} />
+            </Route>
+
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </div>
         <Footer />
       </>
     );
@@ -84,12 +97,12 @@ class App extends Component {
 }
 
 const mapStateToPros = ({ user }) => ({
-  currentUser: user.currentUser
-})
+  currentUser: user.currentUser,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user)),
-  getItems: items => dispatch(fetchProducts(items))
-})
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  getItems: (items) => dispatch(fetchProducts(items)),
+});
 
 export default connect(mapStateToPros, mapDispatchToProps)(App);

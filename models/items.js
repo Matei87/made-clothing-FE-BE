@@ -4,36 +4,40 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 //create Schema
 const itemsSchema = new Schema({
-    Women: {
+  Women: {
+    id: Number,
+    title: String,
+    items: [
+      {
         id: Number,
-        title: String,
-        items: [{
-            id: Number,
-            color: String,
-            name: String,
-            image: String,
-            price: Number,
-            brand: String,
-            description: String,
-            routeName: String
-        }]
-    },
-    Men: {
+        color: String,
+        name: String,
+        image: String,
+        price: Number,
+        brand: String,
+        description: String,
+        routeName: String,
+      },
+    ],
+  },
+  Men: {
+    id: Number,
+    title: String,
+    items: [
+      {
         id: Number,
-        title: String,
-        items: [{
-            id: Number,
-            color: String,
-            name: String,
-            image: String,
-            price: Number,
-            brand: String,
-            description: String,
-            routeName: String
-        }]
-    },
-    header: String
-})
+        color: String,
+        name: String,
+        image: String,
+        price: Number,
+        brand: String,
+        description: String,
+        routeName: String,
+      },
+    ],
+  },
+  header: String,
+});
 
 const Items = mongoose.model('Items', itemsSchema);
 module.exports = Items;
