@@ -3,6 +3,7 @@ import './ItemDetails.scss';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { HiArrowLeft, HiOutlineHeart } from 'react-icons/hi';
+import ContentLoader from 'react-content-loader';
 //redux
 import { connect } from 'react-redux';
 import { addItem } from '../../redux/cart/cart.actions';
@@ -28,7 +29,13 @@ const ItemDetails = ({ addItem, favorite, addFavorite }) => {
 
           <div className='col-sm-10 col-md-6 col-lg-5'>
             <div className='image-wrapper'>
-              <img src={image} alt='details' />
+              {image ? (
+                <img src={image} alt='details' />
+              ) : (
+                <ContentLoader viewBox='0 0 100 117'>
+                  <rect x='0' y='0' rx='0' ry='0' width='100' height='117' />
+                </ContentLoader>
+              )}
             </div>
           </div>
           <div className='col-sm-10 col-md-6 col-lg-5'>

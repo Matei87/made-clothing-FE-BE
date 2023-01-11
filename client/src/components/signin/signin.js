@@ -18,15 +18,12 @@ const SignIn = () => {
     } catch (error) {
       console.log(error);
     }
-    console.log(email, password);
   };
 
   const handleChangeEmail = (e) => {
-    console.log(e.target.value);
     setEmail(e.target.value);
   };
   const handleChangePassword = (e) => {
-    console.log(e.target.value);
     setPassword(e.target.value);
   };
 

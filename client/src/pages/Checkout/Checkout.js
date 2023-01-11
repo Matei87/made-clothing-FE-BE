@@ -2,6 +2,7 @@ import React from 'react';
 import './Checkout.scss';
 
 import { Link } from 'react-router-dom';
+import ContentLoader from 'react-content-loader';
 //redux
 import { connect } from 'react-redux';
 import {
@@ -22,45 +23,46 @@ const Checkout = ({ cartItems, total, clearItem, addItem, removeItem }) => {
           <>
             <div className='row'>
               <div className='col-md-9 wrapper'>
-                {cartItems
-                  ? cartItems.map((item) => (
-                      <div className='col-md-12' key={item.id}>
-                        <Link
-                          to={`${item.name.split(' ').join('-').toLowerCase()}`}
-                          state={item}
-                        >
-                          <div className='image-wrapper'>
-                            <img src={item.image} alt='checkout' />
-                          </div>
-                          <div className='content-over'>
-                            <span>{item.name}</span>
-                          </div>
-                        </Link>
-
-                        <div className='form-group quantity'>
-                          <div
-                            className='arrow'
-                            onClick={() => removeItem(item)}
-                          >
-                            &#10094;
-                          </div>
-                          <span className='value'>{item.quantity}</span>
-                          <div className='arrow' onClick={() => addItem(item)}>
-                            &#10095;
-                          </div>
+                {cartItems ? (
+                  cartItems.map((item) => (
+                    <div className='col-md-12' key={item.id}>
+                      <Link
+                        to={`${item.name.split(' ').join('-').toLowerCase()}`}
+                        state={item}
+                      >
+                        <div className='image-wrapper'>
+                          <img src={item.image} alt='checkout' />
                         </div>
-                        <div className='price-remove'>
-                          <h2>${item.price}</h2>
-                          <button
-                            className='btn btn-primary'
-                            onClick={() => clearItem(item)}
-                          >
-                            Remove
-                          </button>
+                        <div className='content-over'>
+                          <span>{item.name}</span>
+                        </div>
+                      </Link>
+
+                      <div className='form-group quantity'>
+                        <div className='arrow' onClick={() => removeItem(item)}>
+                          &#10094;
+                        </div>
+                        <span className='value'>{item.quantity}</span>
+                        <div className='arrow' onClick={() => addItem(item)}>
+                          &#10095;
                         </div>
                       </div>
-                    ))
-                  : null}
+                      <div className='price-remove'>
+                        <h2>${item.price}</h2>
+                        <button
+                          className='btn btn-primary'
+                          onClick={() => clearItem(item)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <ContentLoader viewBox='0 0 400 130'>
+                    <rect x='0' y='0' rx='0' ry='0' width='400' height='130' />
+                  </ContentLoader>
+                )}
               </div>
 
               <div className='col-md-9'>
